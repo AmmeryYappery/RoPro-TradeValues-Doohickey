@@ -8,6 +8,7 @@ Follow this tutorial on loading unpacked extensions (It shouldn't take too long 
 ![Right under description where it says ID](TutorialImages/id.png)
 
 #Step 3: In CSS/Styles.css put in your extension ID.
+
 ![Right under description where it says ID](TutorialImages/replace.png)
 
 #Step 4: Reload extension
