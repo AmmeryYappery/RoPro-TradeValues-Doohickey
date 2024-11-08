@@ -41,60 +41,97 @@ port.onMessage.addListener((message) => {
     }
 });
 
-var items;
-
+//item-card-link -- limited-icon-container
 function getProjHypeOrRareDiv(itemArray) {
 
 }
 
-function valueDiv() {
+function valueDiv(tagsToAdd, itemValue, textClass) {
     const div = document.createElement('div');
     div.classList.add('item-card-price');
     
     const icon = createIcon('fucking-transmons-icon');
     
     const value = document.createElement('span');
-    value.classList.add('text-robux', 'fucking-rolimon-value');
+    value.innerText = itemValue;
+    value.classList.add(textClass, 'fucking-rolimon-value');
+    // const div2 = document.createElement('div');
 
+    // const icon2 = createIcon('fucking-projected-icon');
+    // const rare = createIcon('fucking-rare-icon');
+    // const hype = createIcon('fucking-hype-icon');
+
+    // div2.appendChild(icon2);
+    // div2.appendChild(rare);
+    // div2.appendChild(hype);
+    
     div.appendChild(icon);
     div.appendChild(value);
+    // div.appendChild(div2);
+
+    
+
     return div
 }
 
-async function addValueToItem(observer, newItems) {
-    await itemsData;
-
-    if(!items || !areSameLists(items,newItems)) {
+var offers;
+// trade-list-detail-offer
+// item-card-caption'
+async function addValueToItem(observer, newOffers) {
+    if(!offers || !areSameLists(offers, newOffers)) {
         observer.disconnect();
-        items = newItems;
-      
+        offers = newOffers;
+
         let offerValue = 0;
         let requestValue = 0;
 
         if(itemsData == undefined) {
-            setInterval(function() {}, 100);
+            let intId = setInterval(function() {
+                if(itemsData != undefined) {
+                    clearInterval(intId);
+                }
+            }, 100);
         }
 
-        for(item of items) {
-            if(!item.getElementsByClassName('fucking-rolimon-value').length > 0 && itemsData != undefined) {
-                const id = item.getElementsByTagName('a')[0].href.match("[0-9]+")[0]; 
-                const div = valueDiv();
-                const itemValue = itemsData['items'][id][4];
-                
-                div.getElementsByClassName('fucking-rolimon-value')[0].textContent = addCommasToNumber(itemValue);
-                item.appendChild(div);
+        for(offer of offers) {
+            const items = offer.getElementsByClassName('item-card-caption');
+            const isGivingSide = offer.getElementsByClassName('trade-list-detail-offer-header')[0].innerText.includes("give"); 
 
-                if(item.parentElement.parentElement.parentElement.tagName == "LI"){
-                    console.log(itemValue);
+            for(item of items) {
+                if(!item.getElementsByClassName('fucking-rolimon-value').length > 0 && itemsData != undefined) {
+                    const id = item.getElementsByTagName('a')[0].href.match("[0-9]+")[0]; // Only one link so it will be the first index.
+                    const itemValue = itemsData['items'][id][4];
+                    const div = valueDiv([], addCommasToNumber(itemValue), 'text-robux');
+                    
+                    item.appendChild(div);
+    
+                    if(isGivingSide){
+                        offerValue += itemValue;
+                    } else {
+                        requestValue += itemValue;
+                    }
                 }
             }
+
+            const robuxLine = offer.getElementsByClassName('robux-line-amount')[1];
+
+            if(robuxLine.getElementsByClassName('fucking-rolimon-value').length < 1) {
+                console.log(robuxLine);
+                var value = offerValue;
+    
+                if(!isGivingSide) { value = requestValue; }
+    
+                const totalValue = valueDiv([], addCommasToNumber(value), 'text-robux-lg');
+                robuxLine.appendChild(totalValue);
+            }
         }
+        
 
         observer.observe(document.body, config);
     }
 }
 const callback = (mutationList, observer) => {
-    const newItems = document.getElementsByClassName('item-card-caption');
+    const newItems = document.getElementsByClassName('trade-list-detail-offer');
 
     addValueToItem(observer, newItems);
 }
