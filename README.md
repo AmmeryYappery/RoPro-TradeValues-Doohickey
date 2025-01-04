@@ -1,6 +1,6 @@
 New repo -> https://github.com/AmmeryYappery/BlueBLOX
 
-The JS is probably really bad but it works and that's what matters.
+The JS is probably really bad but it works and that's what matters. (This is probably like my first actual project using JS [Not first coding project])
 
 # Step 1: Follow this other tutorial
 Follow this tutorial on loading unpacked extensions (It shouldn't take too long it's basically just go to chrome://extensions and click the load unpacked extensions button [With developer mode enabled]): https://knowledge.workspace.google.com/kb/load-unpacked-extensions-000005962
